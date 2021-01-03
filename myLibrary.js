@@ -83,12 +83,14 @@ function addInputField(fieldType, fieldName, fieldValue, fieldIndex) {
     let inputElement = document.createElement('input');
     let fieldID = fieldName + '-' + fieldIndex;
 
-    tableField.setAttribute('data-index', fieldIndex)
-    inputElement.setAttribute('type', fieldType)
-    inputElement.setAttribute('name', fieldName)
-    inputElement.setAttribute('class', fieldName)
-    inputElement.setAttribute('id', fieldID)
-    inputElement.setAttribute('value', fieldValue)
+    tableField.setAttribute('class', fieldName);
+    tableField.setAttribute('data-index', fieldIndex);
+
+    inputElement.setAttribute('type', fieldType);
+    inputElement.setAttribute('name', fieldName);
+    
+    inputElement.setAttribute('id', fieldID);
+    inputElement.setAttribute('value', fieldValue);
     tableField.appendChild(inputElement);
     return tableField;
 }
@@ -178,6 +180,7 @@ function addSavedField(fieldName, fieldText, fieldIndex) {
     let fieldID = fieldName + '-' + fieldIndex;
 
     tableField.setAttribute('data-index', fieldIndex)
+    tableField.setAttribute('class', fieldName)
     inputElement.innerText = fieldText;
     inputElement.setAttribute('type', 'text')
     inputElement.setAttribute('class', fieldName)
@@ -238,8 +241,9 @@ function deleteRow(indexNumber) {
 
     libraryTable.removeChild(rowToDelete);
     if (rowToDelete.getAttribute('class') === 'saved-row') {
-        myLibrary[indexNumber] = [];
-        localStorage.setItem('localLibrary', myLibrary);
+        //myLibrary[indexNumber] = [];
+        myLibrary.splice(indexNumber,1);
+        localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
     }
 
 }
@@ -250,6 +254,10 @@ function saveInput(indexNumber) {
     let bookAuthor = document.getElementById(`author-${indexNumber}`).value;
     let bookPageNumber = document.getElementById(`page-number-${indexNumber}`).value;
     let bookReadStatus = document.getElementById(`read-${indexNumber}`).value;
+    
+    if (bookTitle === '') {
+        return alert('You cannot leave BookTitle Empty');
+    }
 
     if (myLibrary[indexNumber]) {
         myLibrary[indexNumber].title = bookTitle;
