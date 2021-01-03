@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+<script type="text/javascript" src="myLibrary.js" defer></script>
+
+<body>
+    <header>
+        <title>Mini Library</title>
+    </header>
+    <div> this is the main field
+    </div>
+
+    <div id="my-library">
+        <table>
+            <tbody>
+                <tr class="table-head">
+                    <th><label for="title">Book Title</label></th>
+                    <th><label for="author">Author</lable>
+                    </th>
+                    <th><label for="page-number">Page Number</label></th>
+                    <th><label for="read-status">Status</label></th>
+                    <th><label for="save">Save/Edit</label></th>
+                    <th><label for="delete">Delete</label> </th>
+                </tr>
+                <tr class="saved-row">
+                    <td>The Hobbit</td>
+                    <td>J.R.R. Tolkien</td>
+                    <td>256</td>
+                    <td><button>Read</button></td>
+                    <td><button>edit</button></td>
+                    <td><button name="delete" value="delete" id="delete-button">delete</button></td>
+                </tr>
+                <!-- 
+                <tr class="input-row">
+                    <td><input type="text" name="title" class="text-input" id="title">New Title</td>
+                    <td><input type="text" name="author" class="text-input" id="author">New Author</td>
+                    <td><input type="number" name="page-number" class="number-input" id="page-number">New Page Number</td>
+                    <td><button name="read-status" value="read-status" id="read-status" class='table-button'>Read</button></td>
+                    <td><button name="save" value="save" id="save" class='table-button'>save</button></td>
+                    <td><button name="delete" value="delete" id="delete" class='table-button'>delete</button></td>
+                </tr>
+                -->
+            </tbody>
+
+
+        </table>
+        <div><button name='add-new-book' value="Add New Book" id='add-new-book' class="add-new-book">Add New Book</button>
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>
