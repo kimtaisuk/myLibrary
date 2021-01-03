@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-</head>
+<head></head>
 <script type="text/javascript" src="myLibrary.js" defer></script>
+<link href="reset.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+
+
 
 <body>
     <header>
-        <title>Mini Library</title>
+        <div id='title'> 
+            <h1>My Library</h1>
+            
+        </div>
     </header>
-    <div> this is the main field
-    </div>
+    <div><button name='add-new-book' value="Add New Book" id='add-new-book' class="add-new-book">Add New
+        Book</button>
+</div>
 
     <div id="my-library">
         <table>
             <tbody>
                 <tr class="table-head">
-                    <th><label for="title">Book Title</label></th>
-                    <th><label for="author">Author</lable>
+                    <th><label for="title" class='title'>Title</label></th>
+                    <th><label for="author" class='author'>Author</lable>
                     </th>
                     <th><label for="page-number">Page Number</label></th>
                     <th><label for="read-status">Status</label></th>
@@ -46,8 +53,7 @@
 
 
         </table>
-        <div><button name='add-new-book' value="Add New Book" id='add-new-book' class="add-new-book">Add New Book</button>
-        </div>
+
 
 
     </div>

@@ -10,12 +10,13 @@ var myLibrary = [];
 
 if (storageAvailable('localStorage')) {
     // Yippee! We can use localStorage awesomeness
-    if (localStorage.getItem('localLibrary')){
-        myLibrary = JSON.parse(localStorage.getItem('localLibrary'));
+    let localData = localStorage.getItem('localLibrary');
+    if (localData.includes('libIndexNumber')){
+        myLibrary = JSON.parse(localData);
 
         myLibrary.forEach((oneBook) => {
-
-            addSavedRow(oneBook.libIndexNumber);
+            let eachRow = addSavedRow(oneBook.libIndexNumber);
+            libraryTable.insertBefore(eachRow,tableHead.nextElementSibling);
         })
     }
 }
@@ -85,6 +86,7 @@ function addInputField(fieldType, fieldName, fieldValue, fieldIndex) {
     tableField.setAttribute('data-index', fieldIndex)
     inputElement.setAttribute('type', fieldType)
     inputElement.setAttribute('name', fieldName)
+    inputElement.setAttribute('class', fieldName)
     inputElement.setAttribute('id', fieldID)
     inputElement.setAttribute('value', fieldValue)
     tableField.appendChild(inputElement);
@@ -178,6 +180,7 @@ function addSavedField(fieldName, fieldText, fieldIndex) {
     tableField.setAttribute('data-index', fieldIndex)
     inputElement.innerText = fieldText;
     inputElement.setAttribute('type', 'text')
+    inputElement.setAttribute('class', fieldName)
     inputElement.setAttribute('name', fieldName)
     inputElement.setAttribute('id', fieldID)
     inputElement.setAttribute('value', fieldText)
@@ -243,8 +246,6 @@ function deleteRow(indexNumber) {
 
 function saveInput(indexNumber) {
 
-
-
     let bookTitle = document.getElementById(`title-${indexNumber}`).value;
     let bookAuthor = document.getElementById(`author-${indexNumber}`).value;
     let bookPageNumber = document.getElementById(`page-number-${indexNumber}`).value;
@@ -260,9 +261,12 @@ function saveInput(indexNumber) {
         myLibrary[indexNumber] = newBook;
         localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
     }
+    let oldRow = document.querySelector(`tr[data-index='${indexNumber}']`)
+    let newRow = addSavedRow(indexNumber);
+    libraryTable.insertBefore(newRow,oldRow.nextElementSibling);
+    libraryTable.removeChild(oldRow);
+    //deleteRow(indexNumber);
 
-    deleteRow(indexNumber);
-    addSavedRow(indexNumber);
 
 }
 
@@ -272,8 +276,6 @@ function addSavedRow(indexNumber) {
     thisSavedRow.setAttribute('data-index', indexNumber);
     thisSavedRow.classList.add('saved-row');
     let thisBook = myLibrary[indexNumber];
-
-
 
     var titleField = addSavedField('title', thisBook.title, indexNumber);
     var authorField = addSavedField('author', thisBook.author, indexNumber);
@@ -291,10 +293,10 @@ function addSavedRow(indexNumber) {
     thisSavedRow.appendChild(editButton);
     thisSavedRow.appendChild(deleteButton);
 
-    libraryTable.insertBefore(thisSavedRow,tableHead.nextElementSibling);
+    return thisSavedRow;
 }
 
-function editInput(event) {
+/*unction editInput(event) {
 
     let clickedElement = event.target;
     let savedRow = clickedElement.parentNode.parentNode;
@@ -325,7 +327,7 @@ function editInput(event) {
     newInputRow.newReadButton.secondChild.innerText = thisReadStatus;
     newInputRow.setTableElement();
 
-}
+} */
 
 
 function BookInfo(title, author, totalPageNumber, readStatus, libIndexNumber) {
