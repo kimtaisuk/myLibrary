@@ -6,19 +6,28 @@ var tableHead = document.querySelector("tr[class='table-head']")
 
 newBookButton.addEventListener('click', addInputRow);
 
-var myLibrary = [];
+var myLibrary = {}; //Library is an object
 
 if (storageAvailable('localStorage')) {
     // Yippee! We can use localStorage awesomeness
     let localData = localStorage.getItem('localLibrary');
-    if (localData.includes('libIndexNumber')){
-        myLibrary = JSON.parse(localData);
+    if (localData !== null) {
+        if (localData.includes('libIndexNumber')){
+            myLibrary = JSON.parse(localData);
+    
+            /*myLibrary.forEach((oneBook) => {
+                let eachRow = addSavedRow(oneBook.libIndexNumber);
+                libraryTable.insertBefore(eachRow,tableHead.nextElementSibling);
+            })*/
 
-        myLibrary.forEach((oneBook) => {
-            let eachRow = addSavedRow(oneBook.libIndexNumber);
-            libraryTable.insertBefore(eachRow,tableHead.nextElementSibling);
-        })
+            for (const eachBookIndex in myLibrary) {
+                eachBook = myLibrary[eachBookIndex];
+                let eachRow = addSavedRow(eachBook.libIndexNumber);
+                libraryTable.insertBefore(eachRow,tableHead.nextElementSibling);
+            }
+        }
     }
+
 }
 
 
@@ -34,7 +43,15 @@ function addInputRow(event) {
     // Case 1. If user clicked the Add New Book Button
     if (classOfCE === 'add-new-book') {
         var thisInputRow = document.createElement('tr');
-        var indexNumber = myLibrary.length;
+        
+        //var indexNumber = myLibrary.length;
+        var indexNumber;
+        if (document.querySelector("tr[class='saved-row']")===null) {
+            indexNumber = 0;
+
+        } else {
+            indexNumber = parseInt(libraryTable.children[1].getAttribute('data-index'))+1;
+        }
         // create a temporary, empty Book Information as a place holder
         var newTempBook = new BookInfo('', '', '', 'read', indexNumber)
         libraryTable.insertBefore(thisInputRow,tableHead.nextElementSibling);
@@ -48,8 +65,9 @@ function addInputRow(event) {
         libraryTable.insertBefore(thisInputRow,thisSavedRow);
         libraryTable.removeChild(thisSavedRow);
 
-        var newTempBook = myLibrary[indexNumber];
-
+        //var newTempBook = myLibrary[indexNumber];
+        let bookIndex = 'book-' + indexNumber;
+        var newTempBook = myLibrary[bookIndex];
 
 
     }
@@ -212,15 +230,16 @@ function changeReadStatus(event) {
     else //if this row is a Saved Row
     {
         var indexNumber = thisRow.getAttribute('data-index');
-        if (myLibrary[indexNumber].readStatus === 'read') {
-            myLibrary[indexNumber].readStatus = 'not read';
+        var bookIndex = 'book-' + indexNumber;
+        if (myLibrary[bookIndex].readStatus === 'read') {
+            myLibrary[bookIndex].readStatus = 'not read';
             localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
 
             clickedElement.innerText = 'not read';
             clickedElement.setAttribute('value', 'not read');
         }
-        else if (myLibrary[indexNumber].readStatus === 'not read') {
-            myLibrary[indexNumber].readStatus = 'read';
+        else if (myLibrary[bookIndex].readStatus === 'not read') {
+            myLibrary[bookIndex].readStatus = 'read';
             localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
 
             clickedElement.innerText = 'read';
@@ -238,11 +257,13 @@ function deleteRow(indexNumber) {
 
     //Delete the saved row
     let rowToDelete = document.querySelector(`tr[data-index='${indexNumber}']`);
-
+    var bookIndex = 'book-' + indexNumber;
     libraryTable.removeChild(rowToDelete);
     if (rowToDelete.getAttribute('class') === 'saved-row') {
+        
+        delete myLibrary[bookIndex];
         //myLibrary[indexNumber] = [];
-        myLibrary.splice(indexNumber,1);
+        //myLibrary.splice(indexNumber,1);
         localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
     }
 
@@ -254,21 +275,22 @@ function saveInput(indexNumber) {
     let bookAuthor = document.getElementById(`author-${indexNumber}`).value;
     let bookPageNumber = document.getElementById(`page-number-${indexNumber}`).value;
     let bookReadStatus = document.getElementById(`read-${indexNumber}`).value;
-    
+    var bookIndex = 'book-' + indexNumber;
     if (bookTitle === '') {
         return alert('You cannot leave BookTitle Empty');
     }
 
-    if (myLibrary[indexNumber]) {
-        myLibrary[indexNumber].title = bookTitle;
-        myLibrary[indexNumber].author = bookAuthor;
-        myLibrary[indexNumber].totalPageNumber = bookPageNumber;
-        myLibrary[indexNumber].readStatus = bookReadStatus;
+    if (myLibrary[bookIndex]) {
+        myLibrary[bookIndex].title = bookTitle;
+        myLibrary[bookIndex].author = bookAuthor;
+        myLibrary[bookIndex].totalPageNumber = bookPageNumber;
+        myLibrary[bookIndex].readStatus = bookReadStatus;
     } else {
         let newBook = new BookInfo(bookTitle, bookAuthor, bookPageNumber, bookReadStatus, indexNumber);
-        myLibrary[indexNumber] = newBook;
-        localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
+        myLibrary[bookIndex] = newBook;
     }
+    localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
+
     let oldRow = document.querySelector(`tr[data-index='${indexNumber}']`)
     let newRow = addSavedRow(indexNumber);
     libraryTable.insertBefore(newRow,oldRow.nextElementSibling);
@@ -279,11 +301,11 @@ function saveInput(indexNumber) {
 }
 
 function addSavedRow(indexNumber) {
-
+    let bookIndex = 'book-' + indexNumber;
     let thisSavedRow = document.createElement('tr');
     thisSavedRow.setAttribute('data-index', indexNumber);
     thisSavedRow.classList.add('saved-row');
-    let thisBook = myLibrary[indexNumber];
+    let thisBook = myLibrary[bookIndex];
 
     var titleField = addSavedField('title', thisBook.title, indexNumber);
     var authorField = addSavedField('author', thisBook.author, indexNumber);
@@ -345,10 +367,6 @@ function BookInfo(title, author, totalPageNumber, readStatus, libIndexNumber) {
     this.totalPageNumber = totalPageNumber.toString();
     this.readStatus = readStatus;
 }
-
-
-
-
 
 
 
