@@ -121,6 +121,7 @@ function addReadButton(fieldValue, fieldIndex) {
     let fieldID = 'read-' + fieldIndex;
 
     tableField.setAttribute('data-index', fieldIndex)
+    tableField.setAttribute('class','read-status')
     inputElement.setAttribute('name', 'read-status')
     inputElement.setAttribute('id', fieldID)
     inputElement.setAttribute('class', 'read-button')
@@ -139,6 +140,7 @@ function addEditButton(fieldIndex) {
     let fieldID = 'edit-' + fieldIndex;
 
     tableField.setAttribute('data-index', fieldIndex);
+    tableField.setAttribute('class', 'save-edit');
     inputElement.innerText = 'edit';
     inputElement.setAttribute('name', 'edit');
     inputElement.setAttribute('class', 'edit-button');
@@ -156,6 +158,7 @@ function addSaveButton(fieldIndex) {
     let fieldID = 'save-' + fieldIndex;
 
     tableField.setAttribute('data-index', fieldIndex);
+    tableField.setAttribute('class', 'save-edit');
     inputElement.innerText = 'save';
     inputElement.setAttribute('name', 'save');
     inputElement.setAttribute('class', 'save-button');
@@ -177,6 +180,8 @@ function addDeleteButton(fieldIndex) {
     let fieldID = 'delete-' + fieldIndex;
 
     tableField.setAttribute('data-index', fieldIndex);
+    tableField.setAttribute('class', 'delete');
+
     inputElement.innerText = 'delete';
     inputElement.setAttribute('name', 'delete');
     inputElement.setAttribute('class', 'delete-button');
@@ -259,8 +264,9 @@ function deleteRow(indexNumber) {
     let rowToDelete = document.querySelector(`tr[data-index='${indexNumber}']`);
     var bookIndex = 'book-' + indexNumber;
     libraryTable.removeChild(rowToDelete);
-    if (rowToDelete.getAttribute('class') === 'saved-row') {
-        
+    //if (rowToDelete.getAttribute('class') === 'saved-row') {
+    if (myLibrary[bookIndex]) {
+    
         delete myLibrary[bookIndex];
         //myLibrary[indexNumber] = [];
         //myLibrary.splice(indexNumber,1);
@@ -296,8 +302,6 @@ function saveInput(indexNumber) {
     libraryTable.insertBefore(newRow,oldRow.nextElementSibling);
     libraryTable.removeChild(oldRow);
     //deleteRow(indexNumber);
-
-
 }
 
 function addSavedRow(indexNumber) {
@@ -325,40 +329,6 @@ function addSavedRow(indexNumber) {
 
     return thisSavedRow;
 }
-
-/*unction editInput(event) {
-
-    let clickedElement = event.target;
-    let savedRow = clickedElement.parentNode.parentNode;
-    let indexNumber = savedRow.getAttribute('data-index'); //index number for the library
-
-    //call the library file
-    thisLibrary = myLibrary[indexNumber];
-    let thisTitle = thisLibrary.title;
-    let thisAuthor = thisLibrary.author;
-    let thisTotalPageNumber = thisLibrary.totalPageNumber;
-    let thisReadStatus = thisLibrary.readStatus;
-
-    // remove all existing saved child nodes
-    while (savedRow.firstChild) {
-        savedRow.removeChild(savedRow.firstChild);
-    }
-
-    //change the saved row to input row;
-    let newInputRow = new addInputRow();
-    newInputRow.singleRow = savedRow;
-    newInputRow.singleRow.setAttribute('class', 'input-row');
-    newInputRow.createTableElement();
-
-    newInputRow.newInputTitle.secondChild.setAttribute('value', thisTitle);
-    newInputRow.newInputAuthor.secondChild.setAttribute('value', thisAuthor);
-    newInputRow.newInputPageNumber.secondChild.setAttribute('value', thisTotalPageNumber);
-    newInputRow.newReadButton.secondChild.setAttribute('value', thisReadStatus);
-    newInputRow.newReadButton.secondChild.innerText = thisReadStatus;
-    newInputRow.setTableElement();
-
-} */
-
 
 function BookInfo(title, author, totalPageNumber, readStatus, libIndexNumber) {
     this.libIndexNumber = libIndexNumber;
