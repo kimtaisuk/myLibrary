@@ -16,7 +16,7 @@ body {
 header {
     height: 100px;
     display: flex;
-
+    padding: 50px 0px 0px 0px;
 }
 
 tbody{
@@ -30,7 +30,7 @@ tbody{
 tr{    
     display: flex;
     flex-direction: row;
-    height: 1.5em;
+    height: 2em;
     
 }
 .table-head{
@@ -40,7 +40,7 @@ tr{
 }
 
 h1 {
-    font-size: 14px;
+    font-size: 36px;
     text-transform: uppercase;
 }
 th{
@@ -73,6 +73,17 @@ td{
     width: 1200px;
     
 }
+
+button {
+    background-color: #f0f0f0;
+    
+    border: none;
+}
+
+button:hover{
+    background-color: #999999;
+}
+
 #add-new-book {
     background-color: #333333;
     color: white;
@@ -80,12 +91,13 @@ td{
     height: 50px;
     width: 50px;
 
-    border: none;
+    margin-bottom: 50px;
 }
-#add-new-book:hover {
-    background-color: #999999;
 
+#add-new-book:hover {
+    background-color: #555555;
 }
+
 
 table {
     border: 1px solid black;
@@ -133,5 +145,10 @@ input {
 .delete {
     width: 100px;
     align-self: center;
+    text-align: center;
+}
+
+input {
+    display: inline-block;
     text-align: center;
 }
