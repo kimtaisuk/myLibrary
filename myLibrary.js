@@ -9,8 +9,8 @@ newBookButton.addEventListener('click', addInputRow);
 var myLibrary = {}; //Library is an object
 
 if (storageAvailable('localStorage')) {
-    // Yippee! We can use localStorage awesomeness
-    let localData = localStorage.getItem('localLibrary');
+    // Yippee! We can use window.localStorage awesomeness
+    let localData = window.localStorage.getItem('localLibrary');
     if (localData !== null) {
         if (localData.includes('libIndexNumber')){
             myLibrary = JSON.parse(localData);
@@ -238,14 +238,14 @@ function changeReadStatus(event) {
         var bookIndex = 'book-' + indexNumber;
         if (myLibrary[bookIndex].readStatus === 'read') {
             myLibrary[bookIndex].readStatus = 'not read';
-            localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
+            window.localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
 
             clickedElement.innerText = 'not read';
             clickedElement.setAttribute('value', 'not read');
         }
         else if (myLibrary[bookIndex].readStatus === 'not read') {
             myLibrary[bookIndex].readStatus = 'read';
-            localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
+            window.localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
 
             clickedElement.innerText = 'read';
             clickedElement.setAttribute('value', 'read');
@@ -270,7 +270,7 @@ function deleteRow(indexNumber) {
         delete myLibrary[bookIndex];
         //myLibrary[indexNumber] = [];
         //myLibrary.splice(indexNumber,1);
-        localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
+        window.localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
     }
 
 }
@@ -295,7 +295,7 @@ function saveInput(indexNumber) {
         let newBook = new BookInfo(bookTitle, bookAuthor, bookPageNumber, bookReadStatus, indexNumber);
         myLibrary[bookIndex] = newBook;
     }
-    localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
+    window.localStorage.setItem('localLibrary', JSON.stringify(myLibrary));
 
     let oldRow = document.querySelector(`tr[data-index='${indexNumber}']`)
     let newRow = addSavedRow(indexNumber);
